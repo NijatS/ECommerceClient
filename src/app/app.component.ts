@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { CustomerToastrService, ToastrPosition, ToastrType } from './services/ui/customer-toastr.service';
 declare var $:any
 
 @Component({
@@ -8,4 +10,7 @@ declare var $:any
 })
 export class AppComponent {
   title = 'ECommerceClient';
+  constructor(private toastr: CustomerToastrService){
+    toastr.message("Salam","Nicat",{toastrType:ToastrType.Info,toastrPosition:ToastrPosition.TopCenter});
+  }
 }
