@@ -10,7 +10,6 @@ declare var $:any
 })
 export class AppComponent {
   title = 'ECommerceClient';
-  constructor(private toastr: CustomerToastrService){
-    toastr.message("Salam","Nicat",{toastrType:ToastrType.Info,toastrPosition:ToastrPosition.TopCenter});
+  constructor(){
   }
 }
