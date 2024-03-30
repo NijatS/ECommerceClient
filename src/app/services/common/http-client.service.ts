@@ -25,13 +25,25 @@ return `${parametr.baseUrl ? parametr.baseUrl : this.baseUrl}/${parametr.control
     else
       url = `${this.url(parametr)}`;
   
-return   this.httpClient.post<T>(url,body,{headers:parametr.headers})
+    return   this.httpClient.post<T>(url,body,{headers:parametr.headers})
   }
-  put(){
-
+  put<T>(parametr : Partial<RequestParamentrs>, body:Partial<T> ): Observable<T>{
+    let url : string = "";
+    if(parametr.fullEndPoint)
+      url = parametr.fullEndPoint
+    else
+      url = `${this.url(parametr)}`;
+  
+    return   this.httpClient.put<T>(url,body,{headers:parametr.headers})
   }
-  delete(){
+  delete<T>(parametr : Partial<RequestParamentrs>,id:string) :Observable<T>{
+    let url : string = "";
+    if(parametr.fullEndPoint)
+      url = parametr.fullEndPoint
+    else
+    url = `${this.url(parametr)}/${id}`;
 
+   return this.httpClient.delete<T>(url,{headers:parametr.headers})
   }
 }
 
