@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.product_create {
+  margin: 5px;
+}
+.create_button {
+  width: calc(100% - 10px);
+  margin: 5px;
+}
