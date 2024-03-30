@@ -19,7 +19,26 @@ export class CreateComponent extends BaseComponent implements OnInit {
  }
 
  create(name:HTMLInputElement,stock:HTMLInputElement,price:HTMLInputElement){
-  this.spinner.show(SpinnerType.BallFussion);
+
+if(!name.value){
+  this.alertify.message("Name must not be empty",{
+    dismissOthers : true,
+    messageType : MessageTypeEnum.Error,
+    position : MessagePositionEnum.TopRight
+  })
+  return;
+}
+if(parseInt(stock.value)<0){
+  this.alertify.message("Stock value must be more than 0",{
+    dismissOthers : true,
+    messageType : MessageTypeEnum.Error,
+    position : MessagePositionEnum.TopRight
+  })
+  return;
+}
+
+
+  this.showSpinner(SpinnerType.BallFussion);
   const create_Product :Create_Product  = new Create_Product();
   create_Product.name = name.value;
   create_Product.stock = parseInt(stock.value);
@@ -27,12 +46,20 @@ export class CreateComponent extends BaseComponent implements OnInit {
 
   
   this.ProductService.create(create_Product,()=>{
-    this.spinner.hide(SpinnerType.BallFussion)
+    this.hideSpinner(SpinnerType.BallFussion)
     this.alertify.message("Product Sucessfully added",{
       dismissOthers : true,
       messageType : MessageTypeEnum.Success,
       position : MessagePositionEnum.TopRight
+    });
+  }, errorMessage =>{
+    this.hideSpinner(SpinnerType.BallFussion)
+    this.alertify.message(errorMessage,{
+      dismissOthers : true,
+      messageType : MessageTypeEnum.Error,
+      position : MessagePositionEnum.TopRight
     })
-  });
+  }
+  );
  }
 }
