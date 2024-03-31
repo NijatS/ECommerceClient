@@ -15,7 +15,7 @@ return `${parametr.baseUrl ? parametr.baseUrl : this.baseUrl}/${parametr.control
     if(parametr.fullEndPoint)
       url = parametr.fullEndPoint
     else
-      url = `${this.url(parametr)}${id ? `/${id}` : ``}`;
+      url = `${this.url(parametr)}${id ? `/${id}` : ``}${parametr.queryString ? `?${parametr.queryString}` : "" }`;
     return this.httpClient.get<T>(url,{headers:parametr.headers})
   }
   post<T>(parametr : Partial<RequestParamentrs>, body:Partial<T> ):Observable<T>{
@@ -23,7 +23,7 @@ return `${parametr.baseUrl ? parametr.baseUrl : this.baseUrl}/${parametr.control
     if(parametr.fullEndPoint)
       url = parametr.fullEndPoint
     else
-      url = `${this.url(parametr)}`;
+      url = `${this.url(parametr)} ${parametr.queryString ? `?${parametr.queryString}` : "" }`;
   
     return   this.httpClient.post<T>(url,body,{headers:parametr.headers})
   }
@@ -32,7 +32,7 @@ return `${parametr.baseUrl ? parametr.baseUrl : this.baseUrl}/${parametr.control
     if(parametr.fullEndPoint)
       url = parametr.fullEndPoint
     else
-      url = `${this.url(parametr)}`;
+      url = `${this.url(parametr)} ${parametr.queryString ? `?${parametr.queryString}` : "" }`;
   
     return   this.httpClient.put<T>(url,body,{headers:parametr.headers})
   }
@@ -41,7 +41,7 @@ return `${parametr.baseUrl ? parametr.baseUrl : this.baseUrl}/${parametr.control
     if(parametr.fullEndPoint)
       url = parametr.fullEndPoint
     else
-    url = `${this.url(parametr)}/${id}`;
+    url = `${this.url(parametr)}/${id} ${parametr.queryString ? `?${parametr.queryString}` : "" }`;
 
    return this.httpClient.delete<T>(url,{headers:parametr.headers})
   }
@@ -51,7 +51,7 @@ return `${parametr.baseUrl ? parametr.baseUrl : this.baseUrl}/${parametr.control
 export class RequestParamentrs{
   controller? : string;
   action? : string;
-
+  queryString? : string
   headers? : HttpHeaders;
   baseUrl? : string;
   fullEndPoint? :string;

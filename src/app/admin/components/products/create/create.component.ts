@@ -1,7 +1,7 @@
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Create_Product } from './../../../../contracts/create_product';
 import { ProductService } from './../../../../services/common/models/product.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BaseComponent, SpinnerType } from '../../../../base/base.component';
 import { AlertifyOptions, AlertifyService, MessagePositionEnum, MessageTypeEnum } from '../../../../services/admin/alertify.service';
 
@@ -17,26 +17,9 @@ export class CreateComponent extends BaseComponent implements OnInit {
  ngOnInit(): void {
    
  }
+ @Output() createdProduct: EventEmitter<Create_Product> = new EventEmitter();
 
  create(name:HTMLInputElement,stock:HTMLInputElement,price:HTMLInputElement){
-
-if(!name.value){
-  this.alertify.message("Name must not be empty",{
-    dismissOthers : true,
-    messageType : MessageTypeEnum.Error,
-    position : MessagePositionEnum.TopRight
-  })
-  return;
-}
-if(parseInt(stock.value)<0){
-  this.alertify.message("Stock value must be more than 0",{
-    dismissOthers : true,
-    messageType : MessageTypeEnum.Error,
-    position : MessagePositionEnum.TopRight
-  })
-  return;
-}
-
 
   this.showSpinner(SpinnerType.BallFussion);
   const create_Product :Create_Product  = new Create_Product();
@@ -48,14 +31,15 @@ if(parseInt(stock.value)<0){
   this.ProductService.create(create_Product,()=>{
     this.hideSpinner(SpinnerType.BallFussion)
     this.alertify.message("Product Sucessfully added",{
-      dismissOthers : true,
+      dismissOthers : false,
       messageType : MessageTypeEnum.Success,
       position : MessagePositionEnum.TopRight
     });
+    this.createdProduct.emit(create_Product);
   }, errorMessage =>{
     this.hideSpinner(SpinnerType.BallFussion)
     this.alertify.message(errorMessage,{
-      dismissOthers : true,
+      dismissOthers : false,
       messageType : MessageTypeEnum.Error,
       position : MessagePositionEnum.TopRight
     })
