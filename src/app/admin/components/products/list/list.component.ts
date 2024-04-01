@@ -6,6 +6,8 @@ import { BaseComponent, SpinnerType } from '../../../../base/base.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AlertifyService, MessagePositionEnum, MessageTypeEnum } from '../../../../services/admin/alertify.service';
 import { MatPaginator } from '@angular/material/paginator';
+
+declare var $:any; 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -17,7 +19,7 @@ export class ListComponent extends BaseComponent implements OnInit {
     super(spinner)
   }
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  displayedColumns: string[] = ['name', 'stock', 'price', 'createdDate','updatedDate'];
+  displayedColumns: string[] = ['name', 'stock', 'price', 'createdDate','updatedDate','edit',"delete"];
   dataSource : MatTableDataSource<List_Product> =null;
  
 async getProducts(){
@@ -42,5 +44,4 @@ async pageChanged(){
 async ngOnInit() {
    await this.getProducts()
   }
-
 }

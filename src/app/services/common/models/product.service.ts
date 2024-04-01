@@ -4,6 +4,7 @@ import { HttpClientService } from './../http-client.service';
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { List_Product } from '../../../contracts/list_product';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,12 @@ export class ProductService {
       );
 
     return await promiseDate;
+  }
+  async delete(id:string){
+  const obs =   this.httpClientService.delete({
+      controller:"products"
+    },id);
+   await firstValueFrom(obs)
   }
 
 }
