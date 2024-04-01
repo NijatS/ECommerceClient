@@ -10,7 +10,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { HttpClientModule } from '@angular/common/http';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
     NgxSpinnerModule,
     AdminModule,
     HttpClientModule,
-    UiModule
+    UiModule,
   ],
   providers: [
     provideClientHydration(),
