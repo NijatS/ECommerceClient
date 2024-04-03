@@ -1,9 +1,11 @@
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ProductService } from './../../services/common/models/product.service';
 import { Directive, ElementRef, EventEmitter, HostListener, Input, Renderer2, Output } from '@angular/core';
 import { SpinnerType } from '../../base/base.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent, DeleteState } from '../../dialogs/delete-dialog/delete-dialog.component';
+import { HttpClientService } from '../../services/common/http-client.service';
+import { AlertifyService, MessagePositionEnum, MessageTypeEnum } from '../../services/admin/alertify.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 declare var $:any;
 @Directive({
@@ -14,9 +16,10 @@ export class DeleteDirective {
   constructor(
     private element:ElementRef,
     private _renderer:Renderer2,
-    private ProductService:ProductService,
+    private httpClientService:HttpClientService,
     private spinner:NgxSpinnerService,
-    public dialog: MatDialog)
+    public dialog: MatDialog,
+    private alertify:AlertifyService)
     {
 const icon = _renderer.createElement("i");
 icon.setAttribute("class","fas fa-trash");
@@ -26,6 +29,7 @@ icon.setAttribute("style","cursor: pointer; color : #ff0000");
 _renderer.appendChild(element.nativeElement,icon)
     }
 @Input() id:string;
+@Input() controller:string
 @Output() callBack:EventEmitter<any> = new EventEmitter();
 
 @HostListener("click")
@@ -33,7 +37,10 @@ _renderer.appendChild(element.nativeElement,icon)
       this.openDialog(async ()=>{
         this.spinner.show(SpinnerType.BallFussion)
         const td : HTMLTableCellElement = this.element.nativeElement;
-        this.ProductService.delete(this.id)
+       // this.ProductService.delete(this.id)
+       this.httpClientService.delete({
+        controller : this.controller
+       },this.id).subscribe(data=>{
         $(td.parentElement)
         .animate({
           opacity:0,
@@ -41,8 +48,21 @@ _renderer.appendChild(element.nativeElement,icon)
           height: "toogle"
         },700,()=>{
           this.callBack.emit();
+          this.alertify.message("Product successfully removed",{
+            dismissOthers : true,
+            messageType: MessageTypeEnum.Success,
+            position:MessagePositionEnum.TopRight
+          })
         })
+        },(errorResponse:HttpErrorResponse)=>{
+          this.alertify.message("The Error when the product is removed",{
+            dismissOthers : true,
+            messageType: MessageTypeEnum.Error,
+            position:MessagePositionEnum.TopRight
+          })
+          this.spinner.hide(SpinnerType.BallFussion)
         })
+       })
       };
      
     openDialog(afterClosed:any): void {
@@ -56,7 +76,6 @@ _renderer.appendChild(element.nativeElement,icon)
         }
       });
     }
-   
 }
 
 
