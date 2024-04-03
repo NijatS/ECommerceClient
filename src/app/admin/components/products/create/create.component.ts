@@ -3,7 +3,8 @@ import { Create_Product } from './../../../../contracts/create_product';
 import { ProductService } from './../../../../services/common/models/product.service';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BaseComponent, SpinnerType } from '../../../../base/base.component';
-import { AlertifyOptions, AlertifyService, MessagePositionEnum, MessageTypeEnum } from '../../../../services/admin/alertify.service';
+import {  AlertifyService, MessagePositionEnum, MessageTypeEnum } from '../../../../services/admin/alertify.service';
+import { FileUploadOptions } from '../../../../services/common/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-create',
@@ -19,6 +20,13 @@ export class CreateComponent extends BaseComponent implements OnInit {
  }
  @Output() createdProduct: EventEmitter<Create_Product> = new EventEmitter();
 
+ @Output() fileUploadOptions : Partial<FileUploadOptions> ={
+  controller : "products",
+  action:"upload",
+  explanation:"Choose photos...",
+  isAdminPage:true,
+  accept:".png,.jpg,.jpeg"
+ }
  create(name:HTMLInputElement,stock:HTMLInputElement,price:HTMLInputElement){
 
   this.showSpinner(SpinnerType.BallFussion);
