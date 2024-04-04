@@ -17,7 +17,6 @@ export class ProductsComponent extends BaseComponent {
   }
   @ViewChild(ListComponent) ListComponents :ListComponent;
   createdProduct(createdProduct: Create_Product){
-    console.log("isledi")
     this.ListComponents.getProducts()
   }
 }
