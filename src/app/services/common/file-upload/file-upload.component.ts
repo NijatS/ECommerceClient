@@ -1,3 +1,4 @@
+import { DialogService } from './../dialog.service';
 import { CustomerToastrService, ToastrPosition, ToastrType } from './../../ui/customer-toastr.service';
 import { Component, Host, HostListener, Input } from '@angular/core';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
@@ -6,7 +7,8 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { AlertifyService, MessagePositionEnum, MessageTypeEnum } from '../../admin/alertify.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FileDeleteState, FileUploadDialogComponent } from '../../../dialogs/file-upload-dialog/file-upload-dialog.component';
-import { DeleteState } from '../../../dialogs/delete-dialog/delete-dialog.component';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { SpinnerType } from '../../../base/base.component';
 
 @Component({
   selector: 'app-file-upload',
@@ -19,6 +21,8 @@ export class FileUploadComponent {
     private alertifyService:AlertifyService,
     private customerToastrService:CustomerToastrService,
     private dialog:MatDialog,
+    private spinner:NgxSpinnerService,
+    private dialogService :DialogService
    ){}
 
   public files: NgxFileDropEntry[];
@@ -34,7 +38,11 @@ export class FileUploadComponent {
       fileData.append(_file.name,_file,file.relativePath)
     })
     }
-    this.openDialog(()=>{
+this.dialogService.openDialog({
+  componentType:FileUploadDialogComponent,
+  data:FileDeleteState.Yes,
+  afterClosed:()=>{
+      this.spinner.show(SpinnerType.BallFussion)
       this.hhtpClientService.post({
         controller:this.options.controller,
         action:this.options.action,
@@ -54,8 +62,10 @@ export class FileUploadComponent {
             toastrPosition:ToastrPosition.TopRight
            })
         }
+        this.spinner.hide(SpinnerType.BallFussion)
       },(errorResponse:HttpErrorResponse)=>{
         const msg = "There was a problem while downloading the files";
+        this.spinner.hide(SpinnerType.BallFussion)
         if(this.options.isAdminPage){
           this.alertifyService.message(msg,{
             messageType:MessageTypeEnum.Error,
@@ -69,21 +79,24 @@ export class FileUploadComponent {
            })
         }
       })
-    })
+  },
+})
+
+  
   }  
   
-  openDialog(afterClosed:any): void {
-    const dialogRef = this.dialog.open(FileUploadDialogComponent, {
-      width:'250px',
-      data:DeleteState.Yes,
-    });
+  // openDialog(afterClosed:any): void {
+  //   const dialogRef = this.dialog.open(FileUploadDialogComponent, {
+  //     width:'250px',
+  //     data:DeleteState.Yes,
+  //   });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if(result == FileDeleteState.Yes){
-        afterClosed()
-      }
-    });
-  }
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if(result == FileDeleteState.Yes){
+  //       afterClosed()
+  //     }
+  //   });
+  // }
   
 }
 

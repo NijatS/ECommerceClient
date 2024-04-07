@@ -18,15 +18,16 @@ return `${parametr.baseUrl ? parametr.baseUrl : this.baseUrl}/${parametr.control
       url = `${this.url(parametr)}${id ? `/${id}` : ``}${parametr.queryString ? `?${parametr.queryString}` : "" }`;
     return this.httpClient.get<T>(url,{headers:parametr.headers})
   }
-  post<T>(parametr : Partial<RequestParamentrs>, body:Partial<T> ):Observable<T>{
-    let url : string = "";
-    if(parametr.fullEndPoint)
-      url = parametr.fullEndPoint
+  post<T>(parametr: Partial<RequestParamentrs>, body: Partial<T>): Observable<T> {
+    let url: string = "";
+    if (parametr.fullEndPoint)
+      url = parametr.fullEndPoint;
     else
-      url = `${this.url(parametr)} ${parametr.queryString ? `?${parametr.queryString}` : "" }`;
-  
-    return   this.httpClient.post<T>(url,body,{headers:parametr.headers})
+      url = `${this.url(parametr)}${parametr.queryString ? `?${parametr.queryString}` : ""}`
+
+    return this.httpClient.post<T>(url, body, { headers: parametr.headers });
   }
+
   put<T>(parametr : Partial<RequestParamentrs>, body:Partial<T> ): Observable<T>{
     let url : string = "";
     if(parametr.fullEndPoint)
