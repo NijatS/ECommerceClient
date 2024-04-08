@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './admin/layout/layout.component';
 import { DasboardComponent } from './admin/components/dasboard/dasboard.component';
-import { ProductsComponent } from './ui/components/products/products.component';
 import { HomeComponent } from './ui/components/home/home.component';
 
 const routes: Routes = [
@@ -21,6 +20,7 @@ const routes: Routes = [
   {path:"",component:HomeComponent},
   {path:"basket",loadChildren:()=> import("./ui/components/baskets/baskets.module").then(module=>module.BasketsModule)},
   {path:"products",loadChildren:()=> import("./ui/components/products/products.module").then(module=>module.ProductsModule)},
+  {path:"register",loadChildren:()=> import("./ui/components/register/register.module").then(module=>module.RegisterModule)},
 ];
 
 @NgModule({
