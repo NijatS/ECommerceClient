@@ -1,18 +1,21 @@
-import { MessagePositionEnum } from './../../../services/admin/alertify.service';
 import { CustomerToastrService, ToastrPosition, ToastrType } from './../../../services/ui/customer-toastr.service';
 import { UserService } from './../../../services/common/models/user.service';
 import { User } from './../../../entities/user';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Register_User } from '../../../contracts/users/register_user';
+import { BaseComponent } from '../../../base/base.component';
+import {  NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
-export class RegisterComponent implements OnInit {
-constructor(private formBuilder:FormBuilder,private UserService :UserService,private CustomerToastrService:CustomerToastrService){}
+export class RegisterComponent extends BaseComponent implements OnInit {
+constructor(private formBuilder:FormBuilder,private UserService :UserService,private CustomerToastrService:CustomerToastrService,spinner:NgxSpinnerService){
+  super(spinner)
+}
  frm:FormGroup
 
  ngOnInit(): void {

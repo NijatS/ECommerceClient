@@ -16,4 +16,13 @@ export class UserService {
 },user);
   return await firstValueFrom(obs) as Register_User;
   }
+
+  async login(userNameOrEmail:string,password:string,callBack?:()=>void){
+   const obs =  this.httpClientService.post({
+      controller:"users",
+      action:"login"
+    },{userNameOrEmail,password})
+   await firstValueFrom(obs);
+   callBack();
+  }
 }
