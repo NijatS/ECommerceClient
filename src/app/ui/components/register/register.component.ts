@@ -1,5 +1,10 @@
+import { MessagePositionEnum } from './../../../services/admin/alertify.service';
+import { CustomerToastrService, ToastrPosition, ToastrType } from './../../../services/ui/customer-toastr.service';
+import { UserService } from './../../../services/common/models/user.service';
+import { User } from './../../../entities/user';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { Register_User } from '../../../contracts/users/register_user';
 
 @Component({
   selector: 'app-register',
@@ -7,7 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit {
-constructor(private formBuilder:FormBuilder){}
+constructor(private formBuilder:FormBuilder,private UserService :UserService,private CustomerToastrService:CustomerToastrService){}
  frm:FormGroup
 
  ngOnInit(): void {
@@ -30,18 +35,37 @@ constructor(private formBuilder:FormBuilder){}
     confirmPassword:["",[
       Validators.required
     ]],
-   })
+   },{validators:(group:AbstractControl):ValidationErrors | null=>{
+    let password= group.get("password").value;
+    let confirmPassword= group.get("confirmPassword").value;
+    return password === confirmPassword ?null : {notSame:true}
+   }})
  }
 
  get component(){
   return this.frm.controls;
  }
  submitted: boolean = false;
- onSubmit(data){
-  console.log(this.component)
+ async onSubmit(user:User){
   this.submitted = true;
+
   if(this.frm.invalid){
     return;
   }
+ const result : Register_User  =  await this.UserService.register(user);
+ if(result.succeded){
+  this.CustomerToastrService.message(result.message,"Success",{
+    toastrPosition : ToastrPosition.TopRight,
+    toastrType: ToastrType.Success
+  })
+}
+  else{
+    this.CustomerToastrService.message(result.message,"Error",{
+      toastrPosition : ToastrPosition.TopRight,     
+     toastrType: ToastrType.Error
+    })
+}
  }
+
+
 }

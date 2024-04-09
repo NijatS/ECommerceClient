@@ -97,6 +97,9 @@
             'is-invalid': submitted && component.confirmPassword?.errors
           }"
         />
+        <div *ngIf="submitted && frm.hasError('notSame')" class="form-text">
+          Confirm Password must be same
+        </div>
       </div>
       <button style="width: 100%" type="submit" class="btn btn-primary">
         Register
