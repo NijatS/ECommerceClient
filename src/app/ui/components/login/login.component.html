@@ -15,6 +15,7 @@
       <label for="password" class="form-label">Password</label>
       <input #password type="password" class="form-control" id="password" />
     </div>
+    <asl-google-signin-button></asl-google-signin-button>
 
     <button
       (click)="login(userNameOrEmail.value, password.value)"

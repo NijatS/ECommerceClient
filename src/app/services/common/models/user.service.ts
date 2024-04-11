@@ -6,6 +6,7 @@ import { User } from '../../../entities/user';
 import { Register_User } from '../../../contracts/users/register_user';
 import { firstValueFrom } from 'rxjs';
 import { Token } from '../../../contracts/token/token';
+import { SocialUser } from '@abacritt/angularx-social-login';
 
 @Injectable({
   providedIn: 'root'
@@ -36,4 +37,22 @@ export class UserService {
   }
    callBack();
   }
+
+  async googleLogin(user:SocialUser,callBack?:()=>void){
+  const obs =  this.httpClientService.post<SocialUser | tokenResponse> ({
+      action:"google-login",
+      controller:"users"
+    },user);
+
+   const response :tokenResponse =  await firstValueFrom(obs) as tokenResponse;
+
+   if(response){
+    localStorage.setItem("accessToken",response.token.accessToken)
+    this.CustomerToastrService.message("Successfully Google Login","Login",{
+      toastrType : ToastrType.Success,
+      toastrPosition : ToastrPosition.TopRight
+    })
+  }
+   callBack();
+   }
 }
