@@ -14,6 +14,7 @@ export class ProductsComponent extends BaseComponent {
     super(spinner)
   }
   ngOnInit(): void {
+    this.spinner.show(SpinnerType.BallFussion)
   }
   @ViewChild(ListComponent) ListComponents :ListComponent;
   createdProduct(createdProduct: Create_Product){

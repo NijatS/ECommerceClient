@@ -12,7 +12,6 @@ export class CustomersComponent extends BaseComponent implements OnInit {
     super(spinner)
   }
   ngOnInit(): void {
-    this.showSpinner(SpinnerType.BallFussion);
   }
 }
 

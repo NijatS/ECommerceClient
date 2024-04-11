@@ -9,7 +9,7 @@ export class CustomerToastrService {
   constructor( private toastr:ToastrService) { }
   message(message : string, title :string,options: Partial<ToastrOptions>){
     this.toastr[options.toastrType](message,title,{
-      positionClass:options.toastrPosition
+      positionClass:options.toastrPosition,
     })
   }
 }

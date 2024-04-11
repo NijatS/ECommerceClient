@@ -12,6 +12,5 @@ export class DasboardComponent extends BaseComponent {
     super(spinner)
   }
   ngOnInit(): void {
-    this.showSpinner(SpinnerType.BallFussion);
   }
 }
