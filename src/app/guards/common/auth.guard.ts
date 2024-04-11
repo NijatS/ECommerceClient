@@ -8,22 +8,12 @@ import {
 } from '../../services/ui/customer-toastr.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SpinnerType } from '../../base/base.component';
+import { AuthService, _isAuthenticated } from '../../services/common/auth.service';
 export const authGuard: CanActivateFn = (route, state) => {
   inject(NgxSpinnerService).show(SpinnerType.SquareJellyBox);
+  inject(AuthService).identityCheck()
 
-  const jwtHelper = new JwtHelperService();
-  
-
-  const token: string = localStorage.getItem('accessToken');
-
-  let isExpired = false;
-  try {
-    isExpired = jwtHelper.isTokenExpired(token);
-  } catch {
-    isExpired = true;
-  }
-
-  if (!token || isExpired) {
+  if (!_isAuthenticated) {
     inject(Router).navigate(["login"], {
       queryParams: { returnUrl: state.url },
     });

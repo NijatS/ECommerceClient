@@ -36,12 +36,20 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" routerLink="register"
+              <a
+                class="nav-link"
+                aria-current="page"
+                routerLink="register"
+                *ngIf="!authService.isAuthenticated"
                 >Register</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" routerLink="login"
+              <a
+                class="nav-link"
+                aria-current="page"
+                routerLink="login"
+                *ngIf="!authService.isAuthenticated"
                 >Login</a
               >
             </li>
@@ -66,11 +74,25 @@
                 </li>
               </ul>
             </li> -->
-            <a routerLink="admin" class="btn btn-outline-success" type="submit"
+            <a
+              *ngIf="authService.isAuthenticated"
+              routerLink="admin"
+              class="btn btn-outline-success"
+              type="submit"
               >Admin</a
             >
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                aria-current="page"
+                style="color: red; cursor: pointer"
+                (click)="signOut()"
+                *ngIf="authService.isAuthenticated"
+                >Logout</a
+              >
+            </li>
           </ul>
-          <form class="d-flex">
+          <!-- <form class="d-flex">
             <input
               class="form-control me-2"
               type="search"
@@ -80,7 +102,7 @@
             <button class="btn btn-outline-success" type="submit">
               Search
             </button>
-          </form>
+          </form> -->
         </div>
       </div>
     </nav>
