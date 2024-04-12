@@ -5,7 +5,7 @@ import { UserService } from '../../../services/common/models/user.service';
 import { BaseComponent, SpinnerType } from '../../../base/base.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
+import { FacebookLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { tokenResponse } from '../../../contracts/token/token_response';
 
 @Component({
@@ -22,9 +22,15 @@ export class LoginComponent extends BaseComponent {
     spinner:NgxSpinnerService
   ){
     super(spinner)
+    
+    
     this.socialAuthService.authState.subscribe(async (user: SocialUser) => {
       this.spinner.show(SpinnerType.SquareJellyBox)
-      await this.userService.googleLogin(user,()=>{
+    
+
+switch(user.provider){
+  case "GOOGLE":
+    await this.userService.googleLogin(user,()=>{
       this.authService.identityCheck();
       this.activatedRoute.queryParams.subscribe(params =>{
        const returnUrl =  params["returnUrl"]
@@ -35,10 +41,29 @@ export class LoginComponent extends BaseComponent {
           this.router.navigate([""])
        }
       })
+      this.hideSpinner(SpinnerType.SquareJellyBox)
      });
-     this.hideSpinner(SpinnerType.SquareJellyBox)
+     break;
+  case "FACEBOOK":
+    await this.userService.facebookLogin(user,()=>{
+      this.authService.identityCheck();
+      this.activatedRoute.queryParams.subscribe(params =>{
+       const returnUrl =  params["returnUrl"]
+       if(returnUrl){
+         this.router.navigate([returnUrl])
+       }
+       else{
+          this.router.navigate([""])
+       }
+      })
+      this.hideSpinner(SpinnerType.SquareJellyBox)
+     });
+     break;
+}
+
+
     
-    })
+})
   }
   async  login(userNameOrEmail:string,password:string){
     this.spinner.show(SpinnerType.SquareJellyBox)
@@ -56,6 +81,9 @@ export class LoginComponent extends BaseComponent {
     })
    });
    this.hideSpinner(SpinnerType.SquareJellyBox)
+  }
+  FacebookLogin(){
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID)
   }
  
 }

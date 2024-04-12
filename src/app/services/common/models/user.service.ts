@@ -54,5 +54,24 @@ export class UserService {
     })
   }
    callBack();
-   }
+  }
+
+  async facebookLogin(user:SocialUser,callBack?:()=>void){
+    const obs =  this.httpClientService.post<SocialUser | tokenResponse> ({
+      action:"facebook-login",
+      controller:"users"
+    },user);
+
+   const response :tokenResponse =  await firstValueFrom(obs) as tokenResponse;
+
+   if(response){
+    localStorage.setItem("accessToken",response.token.accessToken)
+    this.CustomerToastrService.message("Successfully Facebook Login","Login",{
+      toastrType : ToastrType.Success,
+      toastrPosition : ToastrPosition.TopRight
+    })
+  }
+   callBack();
+  }
+  
 }
