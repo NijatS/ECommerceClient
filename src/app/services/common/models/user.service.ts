@@ -21,57 +21,6 @@ export class UserService {
   return await firstValueFrom(obs) as Register_User;
   }
 
-  async login(userNameOrEmail:string,password:string,callBack?:()=>void){
-   const obs =  this.httpClientService.post<any | Token>({
-      controller:"users",
-      action:"login"
-    },{userNameOrEmail,password})
-  const tokenResponse : tokenResponse =  await firstValueFrom(obs) as tokenResponse;
-  const token = tokenResponse.token;
-  if(token){
-  localStorage.setItem("accessToken",token.accessToken);
-    this.CustomerToastrService.message("Successfully Login","Login",{
-      toastrType : ToastrType.Success,
-      toastrPosition : ToastrPosition.TopRight
-    })
-  }
-   callBack();
-  }
 
-  async googleLogin(user:SocialUser,callBack?:()=>void){
-  const obs =  this.httpClientService.post<SocialUser | tokenResponse> ({
-      action:"google-login",
-      controller:"users"
-    },user);
-
-   const response :tokenResponse =  await firstValueFrom(obs) as tokenResponse;
-
-   if(response){
-    localStorage.setItem("accessToken",response.token.accessToken)
-    this.CustomerToastrService.message("Successfully Google Login","Login",{
-      toastrType : ToastrType.Success,
-      toastrPosition : ToastrPosition.TopRight
-    })
-  }
-   callBack();
-  }
-
-  async facebookLogin(user:SocialUser,callBack?:()=>void){
-    const obs =  this.httpClientService.post<SocialUser | tokenResponse> ({
-      action:"facebook-login",
-      controller:"users"
-    },user);
-
-   const response :tokenResponse =  await firstValueFrom(obs) as tokenResponse;
-
-   if(response){
-    localStorage.setItem("accessToken",response.token.accessToken)
-    this.CustomerToastrService.message("Successfully Facebook Login","Login",{
-      toastrType : ToastrType.Success,
-      toastrPosition : ToastrPosition.TopRight
-    })
-  }
-   callBack();
-  }
   
 }
