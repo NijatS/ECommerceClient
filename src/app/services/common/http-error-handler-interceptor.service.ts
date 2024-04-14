@@ -11,13 +11,16 @@ import { Observable, catchError, of } from 'rxjs';
 import { CustomerToastrService, ToastrPosition, ToastrType } from '../ui/customer-toastr.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SpinnerType } from '../../base/base.component';
+import { UserAuthService } from './models/user-auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
 
-  constructor(private toastrService : CustomerToastrService,private spinner:NgxSpinnerService) {}
+  constructor(private toastrService : CustomerToastrService,private spinner:NgxSpinnerService,
+    private userAuthService:UserAuthService
+  ) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -27,10 +30,14 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
       catchError((error) => {
         switch (error.status) {
           case HttpStatusCode.Unauthorized:
+        
             this.toastrService.message("Bu islem ucun yetkili diyilsiniz","Yetkisiz islem!",{
               toastrType:ToastrType.Warning,
               toastrPosition: ToastrPosition.BottomRight
             })
+            this.userAuthService.refreshTokenLogin(localStorage.getItem("refreshToken")).then(
+              () =>{}
+            );
             break;
           case HttpStatusCode.InternalServerError:
             this.toastrService.message("Sunucuya erisilmiyor","Sunucu hatasi!",{
@@ -57,8 +64,9 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
             })
             break;
         }
-        console.log("salam")
         this.spinner.hide(SpinnerType.SquareJellyBox) 
+        this.spinner.hide(SpinnerType.BallSpinClockwiseFade) 
+        this.spinner.hide(SpinnerType.BallFussion) 
         return of(error);
       })
     );

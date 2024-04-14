@@ -3,7 +3,7 @@ import { HttpClientService } from '../http-client.service';
 import { CustomerToastrService, ToastrPosition, ToastrType } from '../../ui/customer-toastr.service';
 import { Token } from '../../../contracts/token/token';
 import { tokenResponse } from '../../../contracts/token/token_response';
-import { firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { SocialUser } from '@abacritt/angularx-social-login';
 
 @Injectable({
@@ -14,16 +14,16 @@ export class UserAuthService {
   constructor(private httpClientService:HttpClientService,private CustomerToastrService:CustomerToastrService
   ) { }
 
-
   async login(userNameOrEmail:string,password:string,callBack?:()=>void){
     const obs =  this.httpClientService.post<any | Token>({
-       controller:"users",
-       action:"auth"
+       controller:"auth",
+       action:"login"
      },{userNameOrEmail,password})
    const tokenResponse : tokenResponse =  await firstValueFrom(obs) as tokenResponse;
    const token = tokenResponse.token;
    if(token){
    localStorage.setItem("accessToken",token.accessToken);
+   localStorage.setItem("refreshToken",token.refreshToken);
      this.CustomerToastrService.message("Successfully Login","Login",{
        toastrType : ToastrType.Success,
        toastrPosition : ToastrPosition.TopRight
@@ -42,6 +42,7 @@ export class UserAuthService {
  
     if(response){
      localStorage.setItem("accessToken",response.token.accessToken)
+   localStorage.setItem("refreshToken",response.token.refreshToken);
      this.CustomerToastrService.message("Successfully Google Login","Login",{
        toastrType : ToastrType.Success,
        toastrPosition : ToastrPosition.TopRight
@@ -59,8 +60,9 @@ export class UserAuthService {
  
     const response :tokenResponse =  await firstValueFrom(obs) as tokenResponse;
  
-    if(response){
+    if(response != null){
      localStorage.setItem("accessToken",response.token.accessToken)
+    localStorage.setItem("refreshToken",response.token.refreshToken);
      this.CustomerToastrService.message("Successfully Facebook Login","Login",{
        toastrType : ToastrType.Success,
        toastrPosition : ToastrPosition.TopRight
@@ -68,5 +70,17 @@ export class UserAuthService {
 
    }
     callBack();
+   }
+   
+   async refreshTokenLogin(refreshToken:string,callBack?:()=>void){
+     const obs : Observable<any | tokenResponse>  = this.httpClientService.post<any | tokenResponse>({
+      controller:"auth",
+      action:"RefreshToken"
+     },{refreshToken});
+    const response :tokenResponse = await firstValueFrom(obs) as tokenResponse;
+     if(response){
+      localStorage.setItem("accessToken",response.token.accessToken);
+      localStorage.setItem("refreshToken",response.token.refreshToken);
+     }
    }
 }

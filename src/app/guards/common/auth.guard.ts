@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import {
   CustomerToastrService,
   ToastrPosition,
@@ -10,8 +9,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { SpinnerType } from '../../base/base.component';
 import { AuthService, _isAuthenticated } from '../../services/common/auth.service';
 export const authGuard: CanActivateFn = (route, state) => {
+
   inject(NgxSpinnerService).show(SpinnerType.SquareJellyBox);
-  inject(AuthService).identityCheck()
+
+  inject(AuthService).identityCheck().then();
 
   if (!_isAuthenticated) {
     inject(Router).navigate(["login"], {

@@ -1,3 +1,4 @@
+import { UserAuthService } from './models/user-auth.service';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
@@ -5,21 +6,32 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private jwtHelper:JwtHelperService) { }
+  constructor(private jwtHelper:JwtHelperService,private userAuthService:UserAuthService) { }
   
-  identityCheck(){
-    
-  const token: string = localStorage.getItem('accessToken');
+  async identityCheck(){
+  
+  let token: string;
+  if(localStorage.getItem("accessToken")){
+    token = localStorage.getItem("accessToken")
+  }
 
-  let isExpired  = false;
+  let isExpired :boolean;
   try {
     isExpired = this.jwtHelper.isTokenExpired(token);
   } catch {
     isExpired = true;
   }
-
-  _isAuthenticated = token != null && !isExpired ;
-
+  if(isExpired && token){
+   try{
+   await this.userAuthService.refreshTokenLogin(localStorage.getItem("refreshToken"));
+      token = localStorage.getItem("accessToken");
+      isExpired = this.jwtHelper.isTokenExpired(token);
+   }
+   catch{
+    localStorage.removeItem("refreshToken")
+   }
+  }
+    _isAuthenticated = token != null && !isExpired ;
   }
 
   get isAuthenticated():boolean{

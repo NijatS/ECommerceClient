@@ -15,11 +15,13 @@ export class AppComponent {
   }
   signOut(){
     localStorage.removeItem("accessToken");
-    this.authService.identityCheck()
-    this.router.navigate([""])
-    this.toastService.message("You have been logged out","Logout",{
-      toastrType:ToastrType.Warning,
-      toastrPosition:ToastrPosition.TopRight
+    localStorage.removeItem("refreshToken")
+    this.authService.identityCheck().then(()=>{
+      this.router.navigate([""])
+      this.toastService.message("You have been logged out","Logout",{
+        toastrType:ToastrType.Warning,
+        toastrPosition:ToastrPosition.TopRight
+      })
     })
   }
 }
