@@ -1,6 +1,10 @@
+import { AlertifyService, MessagePositionEnum, MessageTypeEnum } from './../../../services/admin/alertify.service';
+import { SignalRService } from './../../../services/common/signal-r.service';
 import { Component } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from '../../../base/base.component';
+import { ReceiveFunctions } from '../../../constants/receive-functions';
+import { HubUrls } from '../../../constants/hub-urls';
 
 @Component({
   selector: 'app-dasboard',
@@ -8,9 +12,16 @@ import { BaseComponent, SpinnerType } from '../../../base/base.component';
   styleUrl: './dasboard.component.scss'
 })
 export class DasboardComponent extends BaseComponent {
-  constructor( spinner:NgxSpinnerService){
+  constructor( spinner:NgxSpinnerService,private signalRService:SignalRService,private alertifyService:AlertifyService){
     super(spinner)
+    signalRService.start(HubUrls.ProductHub)
   }
   ngOnInit(): void {
+    this.signalRService.on(ReceiveFunctions.ReceiveProductAddedMessage,message=>{
+      this.alertifyService.message(message,{
+        messageType:MessageTypeEnum.Message,
+        position:MessagePositionEnum.TopRight
+      })
+    })
   }
 }
