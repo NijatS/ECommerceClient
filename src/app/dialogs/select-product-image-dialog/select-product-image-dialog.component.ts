@@ -52,6 +52,12 @@ private dialogService:DialogService){
     }
   })
 }
+showCase(imageId :string){
+  this.spinner.show(SpinnerType.SquareJellyBox)
+  this.productService.changeShowCase(imageId,this.data.toString(),()=>{
+  this.spinner.hide(SpinnerType.SquareJellyBox)
+  })
+}
 }
 
 export enum SelectProductImageState{

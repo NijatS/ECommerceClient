@@ -74,4 +74,9 @@ export class ProductService {
     await firstValueFrom(obs);
     succesCallBack()
   }
+  async changeShowCase(imageId:string,productId:string,successCallBack?:()=>void){
+   const obs =  this.httpClientService.get({controller:"products",action:"changeShowcaseImage",queryString:`imageId=${imageId}&productId=${productId}`});
+   await firstValueFrom(obs);
+   successCallBack();
+  }
 }
