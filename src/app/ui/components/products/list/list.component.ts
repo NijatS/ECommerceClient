@@ -97,7 +97,7 @@ export class ListComponent extends BaseComponent implements OnInit  {
     );
     this.hideSpinner(SpinnerType.BallFussion)
     this.toast.message("Product added to basket","Success",{
-      toastrPosition:ToastrPosition.TopRight,
+      toastrPosition:ToastrPosition.BottomRight,
       toastrType:ToastrType.Success
     })
 

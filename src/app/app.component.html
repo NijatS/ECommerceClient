@@ -108,6 +108,7 @@
               class="btn btn-outline-success"
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
+              (click)="loadComponent()"
             >
               Basket
             </button>
@@ -125,4 +126,16 @@
 <ngx-spinner name="s2" type="square-jelly-box"></ngx-spinner>
 <ngx-spinner name="s3" type="ball-fussion"></ngx-spinner>
 
-<app-baskets></app-baskets>
+<!-- <app-baskets></app-baskets> -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <ng-template appDynamicLoadComponent> </ng-template>
+  </div>
+</div>
