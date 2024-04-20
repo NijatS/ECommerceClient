@@ -1,1 +1,73 @@
-<p>baskets works!</p>
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Shopping Basket</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Product</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="{{ basketItem.basketItemId }}"
+              *ngFor="let basketItem of basketItems; let i = index"
+            >
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ basketItem.name }}</td>
+              <td>{{ basketItem.price }}</td>
+              <td>
+                <div data-mdb-input-init class="form-outline">
+                  <input
+                    type="number"
+                    id="typeNumber"
+                    class="form-control"
+                    style="width: 60px; height: 30px"
+                    value="{{ basketItem.quantity }}"
+                    (change)="changeQuantity($event)"
+                    data-id="{{ basketItem.basketItemId }}"
+                  />
+                </div>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  data-dismiss="modal"
+                  (click)="removeBasketItem(basketItem.basketItemId)"
+                >
+                  X
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success">Complete Shopping</button>
+      </div>
+    </div>
+  </div>
+</div>

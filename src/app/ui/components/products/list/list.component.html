@@ -19,7 +19,7 @@
       <p class="card-text">
         Price: {{ product.price | currency }} | Stock: {{ product.stock }}
       </p>
-      <a href="#" class="btn btn-primary">Add Basket</a>
+      <a (click)="addToBasket(product)" class="btn btn-primary">Add Basket</a>
     </div>
   </div>
 </div>

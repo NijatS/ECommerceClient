@@ -30,11 +30,11 @@
                 >Products</a
               >
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" aria-current="page" routerLink="basket"
                 >Basket</a
               >
-            </li>
+            </li> -->
             <li class="nav-item">
               <a
                 class="nav-link"
@@ -103,6 +103,15 @@
               Search
             </button>
           </form> -->
+          <div class="d-flex">
+            <button
+              class="btn btn-outline-success"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              Basket
+            </button>
+          </div>
         </div>
       </div>
     </nav>
@@ -115,3 +124,5 @@
 <ngx-spinner name="s1" type="ball-spin-clockwise-fade"></ngx-spinner>
 <ngx-spinner name="s2" type="square-jelly-box"></ngx-spinner>
 <ngx-spinner name="s3" type="ball-fussion"></ngx-spinner>
+
+<app-baskets></app-baskets>

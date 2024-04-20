@@ -4,14 +4,23 @@ import { ProductService } from '../../../../services/common/models/product.servi
 import { List_Product } from '../../../../contracts/list_product';
 import { ActivatedRoute } from '@angular/router';
 import { BaseUrl } from '../../../../contracts/base_url';
+import { BasketService } from '../../../../services/common/models/basket.service';
+import { BaseComponent, SpinnerType } from '../../../../base/base.component';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Add_Basket_Item } from '../../../../contracts/basket/add-basket-item';
+import { CustomerToastrService, ToastrPosition, ToastrType } from '../../../../services/ui/customer-toastr.service';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
-export class ListComponent implements OnInit {
-  constructor(private productService:ProductService,private activatedRoute:ActivatedRoute,private FileService:FileService){}
+export class ListComponent extends BaseComponent implements OnInit  {
+  constructor(private productService:ProductService,private activatedRoute:ActivatedRoute,private FileService:FileService,
+    private basketService:BasketService,spinner:NgxSpinnerService,private toast:CustomerToastrService
+  ){
+    super(spinner)
+  }
 
   products:List_Product[];
   currentPageNo:number;
@@ -77,6 +86,22 @@ export class ListComponent implements OnInit {
       }
     })
    
+  }
+  async addToBasket(product:List_Product){
+    this.showSpinner(SpinnerType.BallFussion)
+    let _basketItem:Add_Basket_Item = new Add_Basket_Item();
+    _basketItem.productId = product.id;
+    _basketItem.quantity = 1;
+   await this.basketService.add(
+      _basketItem
+    );
+    this.hideSpinner(SpinnerType.BallFussion)
+    this.toast.message("Product added to basket","Success",{
+      toastrPosition:ToastrPosition.TopRight,
+      toastrType:ToastrType.Success
+    })
+
+
   }
 
 }

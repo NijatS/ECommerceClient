@@ -1,3 +1,4 @@
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   HttpEvent,
   HttpHandler,
@@ -19,7 +20,7 @@ import { UserAuthService } from './models/user-auth.service';
 export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
 
   constructor(private toastrService : CustomerToastrService,private spinner:NgxSpinnerService,
-    private userAuthService:UserAuthService
+    private userAuthService:UserAuthService,private router:Router
   ) {}
 
   intercept(
@@ -30,11 +31,20 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
       catchError((error) => {
         switch (error.status) {
           case HttpStatusCode.Unauthorized:
-        
+            const url = this.router.url;
+            if(url == "/products"){
+              this.toastrService.message("You must first log in to shop.","Unauthorize Action",{
+                toastrType:ToastrType.Warning,
+                toastrPosition: ToastrPosition.BottomRight
+              })
+              break;
+            }
+            else{
             this.toastrService.message("Bu islem ucun yetkili diyilsiniz","Yetkisiz islem!",{
               toastrType:ToastrType.Warning,
               toastrPosition: ToastrPosition.BottomRight
             })
+          }
             this.userAuthService.refreshTokenLogin(localStorage.getItem("refreshToken")).then(
               () =>{}
             );
