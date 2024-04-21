@@ -1,8 +1,12 @@
+import { MessageTypeEnum } from './../../../services/admin/alertify.service';
+import { OrderService } from './../../../services/common/models/order.service';
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from '../../../base/base.component';
 import { BasketService } from '../../../services/common/models/basket.service';
 import { List_Basket_Item } from '../../../contracts/basket/list-basket-item';
+import { CustomerToastrService, ToastrPosition, ToastrType } from '../../../services/ui/customer-toastr.service';
+import { Router } from '@angular/router';
 
 declare var $:any;
 @Component({
@@ -11,7 +15,9 @@ declare var $:any;
   styleUrl: './baskets.component.scss'
 })
 export class BasketsComponent extends BaseComponent implements OnInit {
-  constructor(spinner:NgxSpinnerService,private basketService:BasketService){
+  constructor(spinner:NgxSpinnerService,private basketService:BasketService,
+    private orderService:OrderService,private toast:CustomerToastrService,
+    private router:Router){
     super(spinner)
   }
   basketItems:List_Basket_Item[];
@@ -38,5 +44,20 @@ export class BasketsComponent extends BaseComponent implements OnInit {
    $("."+basketItemId).fadeOut(500,()=>{
     this.hideSpinner(SpinnerType.BallFussion)
    })
+  }
+  async shoppingComplete(){
+  this.showSpinner(SpinnerType.BallFussion)
+  await  this.orderService.create({
+      description:"New Order",
+      address: "Baku"
+    });
+  this.hideSpinner(SpinnerType.BallFussion)
+
+  this.toast.message("Shopping Completed","Order",{
+    toastrType:ToastrType.Info,
+    toastrPosition:ToastrPosition.TopRight
+  })
+
+  this.router.navigate(["/"])
   }
 }
