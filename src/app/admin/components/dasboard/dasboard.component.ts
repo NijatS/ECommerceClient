@@ -16,18 +16,17 @@ export class DasboardComponent extends BaseComponent {
   
   ){
     super(spinner)
-    signalRService.start(HubUrls.ProductHub)
-    signalRService.start(HubUrls.OrderHub)
+  
   }
   ngOnInit(): void {
-    this.signalRService.on(ReceiveFunctions.ReceiveProductAddedMessage,message=>{
+    this.signalRService.on(HubUrls.ProductHub,ReceiveFunctions.ReceiveProductAddedMessage,message=>{
       this.alertifyService.message(message,{
         messageType:MessageTypeEnum.Message,
         position:MessagePositionEnum.TopRight
       })
     });
 
-    this.signalRService.on(ReceiveFunctions.OrderAddedMessage,message=>{
+    this.signalRService.on(HubUrls.OrderHub,ReceiveFunctions.OrderAddedMessage,message=>{
       this.alertifyService.message(message,{
         messageType:MessageTypeEnum.Message,
         position:MessagePositionEnum.TopRight

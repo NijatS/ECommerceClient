@@ -1,4 +1,4 @@
-import { MessageTypeEnum } from './../../../services/admin/alertify.service';
+import {  BasketCompleteState } from './../../../dialogs/basket-complete-dialog/basket-complete-dialog.component';
 import { OrderService } from './../../../services/common/models/order.service';
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -7,6 +7,9 @@ import { BasketService } from '../../../services/common/models/basket.service';
 import { List_Basket_Item } from '../../../contracts/basket/list-basket-item';
 import { CustomerToastrService, ToastrPosition, ToastrType } from '../../../services/ui/customer-toastr.service';
 import { Router } from '@angular/router';
+import { DialogService } from '../../../services/common/dialog.service';
+import { BasketItemDeleteState, BasketItemRemoveDialogComponent } from '../../../dialogs/basket-item-remove-dialog/basket-item-remove-dialog.component';
+import { BasketCompleteDialogComponent } from '../../../dialogs/basket-complete-dialog/basket-complete-dialog.component';
 
 declare var $:any;
 @Component({
@@ -17,7 +20,8 @@ declare var $:any;
 export class BasketsComponent extends BaseComponent implements OnInit {
   constructor(spinner:NgxSpinnerService,private basketService:BasketService,
     private orderService:OrderService,private toast:CustomerToastrService,
-    private router:Router){
+    private router:Router,
+  private dialogService:DialogService){
     super(spinner)
   }
   basketItems:List_Basket_Item[];
@@ -37,27 +41,49 @@ export class BasketsComponent extends BaseComponent implements OnInit {
    this.hideSpinner(SpinnerType.BallFussion)
   }
   async removeBasketItem(basketItemId:string){
-    this.showSpinner(SpinnerType.BallFussion);
 
-   await this.basketService.delete(basketItemId);
+    $("#basketModal").modal("hide");
+    $('.modal-backdrop').remove();
+    
 
-   $("."+basketItemId).fadeOut(500,()=>{
-    this.hideSpinner(SpinnerType.BallFussion)
-   })
-  }
-  async shoppingComplete(){
-  this.showSpinner(SpinnerType.BallFussion)
-  await  this.orderService.create({
-      description:"New Order",
-      address: "Baku"
+    this.dialogService.openDialog({
+      componentType:BasketItemRemoveDialogComponent,
+      data:BasketItemDeleteState.Yes,
+      afterClosed:async ()=> {
+        this.showSpinner(SpinnerType.BallFussion);
+
+        await this.basketService.delete(basketItemId);
+     
+        $("."+basketItemId).fadeOut(500,()=>{
+         this.hideSpinner(SpinnerType.BallFussion);
+        })
+        $("#basketModal").modal("show");
+      }
     });
-  this.hideSpinner(SpinnerType.BallFussion)
+  
+  }
+ shoppingComplete(){
+  
+  $("#basketModal").modal("hide");
+  $('.modal-backdrop').remove();
 
-  this.toast.message("Shopping Completed","Order",{
-    toastrType:ToastrType.Info,
-    toastrPosition:ToastrPosition.TopRight
-  })
-
-  this.router.navigate(["/"])
+ this.dialogService.openDialog({
+  componentType:BasketCompleteDialogComponent,
+  data:BasketCompleteState.Yes,
+  afterClosed :async ()=> {
+    this.showSpinner(SpinnerType.BallFussion)
+    await  this.orderService.create({
+        description:"New Order",
+        address: "Baku"
+      });
+    this.hideSpinner(SpinnerType.BallFussion)
+  
+    this.toast.message("Shopping Completed","Order",{
+      toastrType:ToastrType.Info,
+      toastrPosition:ToastrPosition.TopRight
+    })
+    this.router.navigate(["/"])
+  }
+})
   }
 }
