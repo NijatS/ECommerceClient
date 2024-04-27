@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClientService } from '../http-client.service';
 import { Observable, firstValueFrom } from 'rxjs';
 import { List_Order } from '../../../contracts/order/list_order';
+import { Single_Order } from '../../../contracts/order/single_order';
 
 @Injectable({
   providedIn: 'root'
@@ -29,4 +30,19 @@ promiseData.then(value=>succesCallBack())
 .catch(error=>errorCalBack(error))
    return await promiseData;
   }
+
+
+  async getOrderById(id: string,succesCallBack?,errorCalBack?){
+    const obs :Observable<Single_Order>= this.httpClientService.get<Single_Order>({
+      controller:"orders"
+    },id);
+
+    const promiseData = firstValueFrom(obs);
+    promiseData.then(value=>succesCallBack())
+    .catch(error=>errorCalBack(error))
+       return await promiseData;
+
+  }
+
+
 }

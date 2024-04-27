@@ -10,6 +10,7 @@ import { List_Product } from '../../../../contracts/list_product';
 import { SelectProductImageDialogComponent } from '../../../../dialogs/select-product-image-dialog/select-product-image-dialog.component';
 import { List_Order } from '../../../../contracts/order/list_order';
 import { OrderService } from '../../../../services/common/models/order.service';
+import { OrderDetailDialogComponent } from '../../../../dialogs/order-detail-dialog/order-detail-dialog.component';
 
 declare var $:any; 
 @Component({
@@ -22,8 +23,9 @@ export class ListComponent  extends BaseComponent implements OnInit{
     ,private alertify:AlertifyService,private dialogService:DialogService){
     super(spinner)
   }
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  displayedColumns: string[] = ['orderCode', 'userName', 'totalPrice', 'createdDate','delete'];
+  displayedColumns: string[] = ['orderCode', 'userName', 'totalPrice', 'createdDate','viewdetail','delete'];
   dataSource : MatTableDataSource<List_Order> =null;
  
 async getOrders(){
@@ -54,5 +56,16 @@ async pageChanged(){
 async ngOnInit() {
    await this.getOrders()
   }
+  showDetail(id:string){
+    this,this.dialogService.openDialog({
+      componentType:OrderDetailDialogComponent,
+      data: id,
+      options:{
+        width:'750px'
+      }
+    })
+
+  }
+
 
 }
