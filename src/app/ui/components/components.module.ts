@@ -4,6 +4,8 @@ import { HomeModule } from './home/home.module';
 import { ProductsModule } from './products/products.module';
 import { BasketsModule } from './baskets/baskets.module';
 import { RegisterModule } from './register/register.module';
+import { UpdatePasswordModule } from './update-password/update-password.module';
+import { PasswordResetModule } from './password-reset/password-reset.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,8 @@ import { RegisterModule } from './register/register.module';
     ProductsModule,
     BasketsModule,
     RegisterModule,
-   // LoginModule
+    UpdatePasswordModule,
+    PasswordResetModule
   ],
   exports:[
     BasketsModule

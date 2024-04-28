@@ -73,6 +73,7 @@ export class UserAuthService {
    }
    
    async refreshTokenLogin(refreshToken:string,callBack?:()=>void){
+    if(localStorage.getItem("refreshToken")){
      const obs : Observable<any | tokenResponse>  = this.httpClientService.post<any | tokenResponse>({
       controller:"auth",
       action:"RefreshToken"
@@ -83,4 +84,22 @@ export class UserAuthService {
       localStorage.setItem("refreshToken",response.token.refreshToken);
      }
    }
+  }
+
+  async passwordReset(email:string,callBack?:()=>void){
+    const obs = this.httpClientService.post({
+      controller:"auth",
+      action:"password-reset"
+    },{email:email})
+    await firstValueFrom(obs);
+    callBack();
+  }
+  async verifyResetToken(resetToken:string,userId:string,callBack?:()=>void){
+    const obs = this.httpClientService.post({
+      controller:"auth",
+      action:"verify-reset-token"
+    },{resetToken:resetToken,userId:userId})
+    await firstValueFrom(obs);
+    callBack();
+  }
 }

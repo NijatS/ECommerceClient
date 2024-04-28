@@ -27,12 +27,18 @@
     </div>
     <button
       (click)="login(userNameOrEmail.value, password.value)"
-      style="width: 100%"
       type="submit"
       class="btn btn-primary"
     >
       Login
     </button>
+    <a
+      style="margin-left: 10px"
+      class="btn btn-secondary"
+      routerLink="/password-reset"
+    >
+      Forgot Password
+    </a>
   </div>
   <div class="col-md-3"></div>
 </div>
