@@ -41,7 +41,17 @@ promiseData.then(value=>succesCallBack())
     promiseData.then(value=>succesCallBack())
     .catch(error=>errorCalBack(error))
        return await promiseData;
+  }
+  async completeOrder(id: string,succesCallBack?,errorCalBack?){
+    const obs = this.httpClientService.get({
+      controller:"orders",
+      action:"complete-order"
+    },id);
 
+    const promiseData = firstValueFrom(obs);
+    promiseData.then(value=>succesCallBack())
+    .catch(error=>errorCalBack(error))
+       return await promiseData;
   }
 
 
