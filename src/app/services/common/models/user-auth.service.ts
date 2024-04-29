@@ -95,11 +95,12 @@ export class UserAuthService {
     callBack();
   }
   async verifyResetToken(resetToken:string,userId:string,callBack?:()=>void){
-    const obs = this.httpClientService.post({
+    const obs:Observable<any> = this.httpClientService.post({
       controller:"auth",
       action:"verify-reset-token"
     },{resetToken:resetToken,userId:userId})
-    await firstValueFrom(obs);
+    const state :boolean= await firstValueFrom(obs);
     callBack();
+    return state;
   }
 }

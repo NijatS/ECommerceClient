@@ -1,12 +1,9 @@
-import { tokenResponse } from './../../../contracts/token/token_response';
-import { CustomerToastrService, ToastrPosition, ToastrType } from './../../ui/customer-toastr.service';
+import { CustomerToastrService } from './../../ui/customer-toastr.service';
 import { Injectable } from '@angular/core';
 import { HttpClientService } from '../http-client.service';
 import { User } from '../../../entities/user';
 import { Register_User } from '../../../contracts/users/register_user';
 import { firstValueFrom } from 'rxjs';
-import { Token } from '../../../contracts/token/token';
-import { SocialUser } from '@abacritt/angularx-social-login';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +17,18 @@ export class UserService {
 },user);
   return await firstValueFrom(obs) as Register_User;
   }
+async updatePassword(userId:string,resetToken:string,password:string,passwordConfirm:string,successCallBack?:()=>void,errorCallBack?:(error)=>void){
+  const obs = this.httpClientService.post({
+    controller:"users",
+    action:"update-password"
+  },{userId:userId,resetToken:resetToken,password:password,passwordConfirm:passwordConfirm});
 
+  const promiseData =  firstValueFrom(obs);
+
+  promiseData.then(value=>successCallBack())
+  .catch(error => errorCallBack(error));
+  await promiseData;
+}
 
   
 }

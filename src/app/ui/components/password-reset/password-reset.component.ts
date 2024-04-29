@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { BaseComponent, SpinnerType } from '../../../base/base.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AlertifyService, MessagePositionEnum, MessageTypeEnum } from '../../../services/admin/alertify.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-password-reset',
@@ -12,7 +13,7 @@ import { AlertifyService, MessagePositionEnum, MessageTypeEnum } from '../../../
 export class PasswordResetComponent extends BaseComponent {
 
   constructor(spinner:NgxSpinnerService,private userAuthService:UserAuthService,
-    private alertify:AlertifyService
+    private alertify:AlertifyService,private router:Router
   ){
     super(spinner);
   }
@@ -24,6 +25,8 @@ export class PasswordResetComponent extends BaseComponent {
       messageType:MessageTypeEnum.Notify,
       position:MessagePositionEnum.TopRight
     })
+    this.router.navigate(["/"])
+
    })
   }
 }
