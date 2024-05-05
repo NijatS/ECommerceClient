@@ -1,3 +1,4 @@
+import { RoleModule } from './role/role.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductsModule } from './products/products.module';
@@ -15,7 +16,8 @@ import { AuthorizeMenuModule } from './authorize-menu/authorize-menu.module';
     OrdersModule,
     CustomersModule,
     DasboardModule,
-    AuthorizeMenuModule
+    AuthorizeMenuModule,
+    RoleModule
   ]
 })
 export class ComponentsModule { }

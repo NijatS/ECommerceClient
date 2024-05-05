@@ -48,7 +48,8 @@ _renderer.appendChild(element.nativeElement,icon)
           height: "toogle"
         },700,()=>{
           this.callBack.emit();
-          this.alertify.message("Product successfully removed",{
+          this.alertify.message(`${ this.controller.charAt(0).toUpperCase() +
+            this.controller.substring(1,this.controller.length-1)} successfully removed`,{
             dismissOthers : true,
             messageType: MessageTypeEnum.Success,
             position:MessagePositionEnum.TopRight
