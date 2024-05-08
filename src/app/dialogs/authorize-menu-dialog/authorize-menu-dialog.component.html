@@ -1,8 +1,25 @@
 <h2 mat-dialog-title>Add Role</h2>
-<mat-dialog-content matBadge="4" matBadgeOverlap="false">
+<mat-dialog-content>
   <p>{{ data.name }} endpointe role vermek isteyirsinizmi?</p>
 </mat-dialog-content>
+
+<mat-selection-list #rolesComponent>
+  <mat-list-option
+    *ngFor="let role of listRoles"
+    value="{{ role.name }}"
+    selected="{{ role.selected }}"
+    >{{ role.name }}</mat-list-option
+  >
+</mat-selection-list>
+
 <mat-dialog-actions>
   <button mat-button (click)="close()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+  <button
+    mat-button
+    [mat-dialog-close]="data"
+    cdkFocusInitial
+    (click)="assignRoles(rolesComponent)"
+  >
+    Assign Role
+  </button>
 </mat-dialog-actions>
