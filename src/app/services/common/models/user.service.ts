@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClientService } from '../http-client.service';
 import { User } from '../../../entities/user';
 import { Register_User } from '../../../contracts/users/register_user';
-import { firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { List_User } from '../../../contracts/users/list_user';
 
@@ -35,10 +35,7 @@ async getAllUsers(page = 0,size = 5,succesCallBack?,errorCalBack?){
   const promiseDate =  this.httpClientService.get<{users:List_User[],totalUserCount:number}>({
     controller:"users",
     queryString:`page=${page}&size=${size}`
-  }).toPromise();
-  
-
-
+  }).toPromise();  
   promiseDate.then(
     d => succesCallBack()
   )
@@ -50,5 +47,34 @@ async getAllUsers(page = 0,size = 5,succesCallBack?,errorCalBack?){
 
   return await promiseDate;
 }
+async assignRoleToUser(id:string,roles:string[],successCallBack?:()=>void,errorCallBack?:()=>void){
+  const obs: Observable<any> = this.httpClientService.post({
+   controller:"users",
+   action:"assign-role-to-user"
+  },{
+   roles:roles,
+   userId:id
+  })
+
+  const promiseData = obs.subscribe({
+   next:successCallBack,
+   error:errorCallBack
+  });
+  await promiseData;
+   }
+
+   async getRolesToUser(userId:string,successCallBack?:()=>void,errorCallBack?:(error)=>void){
+    const obs :Observable<{roles:string[]}> = this.httpClientService.get({
+      controller:"users",
+      action:"get-roles-to-user"
+    },userId)
+
+    const promiseData = firstValueFrom(obs);
+    promiseData.then(successCallBack)
+      .catch(error=>errorCallBack(error))
+
+
+      return (await promiseData).roles;
+   }
   
 }

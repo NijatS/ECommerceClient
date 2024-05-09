@@ -7,6 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogService } from '../../../../services/common/dialog.service';
 import { List_User } from '../../../../contracts/users/list_user';
+import { AuthorizeUserDialogComponent } from '../../../../dialogs/authorize-user-dialog/authorize-user-dialog.component';
 
 @Component({
   selector: 'app-list',
@@ -46,6 +47,20 @@ async pageChanged(){
 async ngOnInit() {
    await this.getUsers()
   }
-  
+  assignRole(id:string){
+    this.dialogService.openDialog({
+      componentType:AuthorizeUserDialogComponent,
+      data:id,
+      options:{
+        width:"750px"
+      },
+      afterClosed:()=>{
+        this.alertify.message("Successfully Roles are added!!",{
+          messageType:MessageTypeEnum.Success,
+          position:MessagePositionEnum.TopRight
+        })
+      }
+    })
+  }
 
 }
