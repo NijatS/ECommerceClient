@@ -4,6 +4,8 @@ import { HttpClientService } from '../http-client.service';
 import { User } from '../../../entities/user';
 import { Register_User } from '../../../contracts/users/register_user';
 import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { List_User } from '../../../contracts/users/list_user';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +31,24 @@ async updatePassword(userId:string,resetToken:string,password:string,passwordCon
   .catch(error => errorCallBack(error));
   await promiseData;
 }
+async getAllUsers(page = 0,size = 5,succesCallBack?,errorCalBack?){
+  const promiseDate =  this.httpClientService.get<{users:List_User[],totalUserCount:number}>({
+    controller:"users",
+    queryString:`page=${page}&size=${size}`
+  }).toPromise();
+  
 
+
+  promiseDate.then(
+    d => succesCallBack()
+  )
+    .catch(
+     (errorResponse: HttpErrorResponse) =>{
+      errorCalBack(errorResponse.message)
+     }
+    );
+
+  return await promiseDate;
+}
   
 }
