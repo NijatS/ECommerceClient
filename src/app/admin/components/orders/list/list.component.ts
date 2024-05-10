@@ -34,7 +34,7 @@ async getOrders(){
     this.hideSpinner(SpinnerType.BallFussion)
   },(errorMessage)=>{
     this.hideSpinner(SpinnerType.BallFussion)
-    this.alertify.message(errorMessage,{
+    this.alertify.message(errorMessage.message,{
       dismissOthers : true,
       messageType : MessageTypeEnum.Error,
       position: MessagePositionEnum.TopRight

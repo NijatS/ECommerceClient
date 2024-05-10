@@ -46,7 +46,9 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
             })
           }
             this.userAuthService.refreshTokenLogin(localStorage.getItem("refreshToken")).then(
-              () =>{}
+              () =>{
+              
+              }
             );
             break;
           case HttpStatusCode.InternalServerError:

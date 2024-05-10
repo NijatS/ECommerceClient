@@ -32,6 +32,14 @@
         <i (click)="addProductImages(element.id)" class="fas fa-image"></i>
       </td>
     </ng-container>
+
+    <ng-container matColumnDef="qrCode">
+      <th mat-header-cell *matHeaderCellDef></th>
+
+      <td mat-cell style="text-align: center" *matCellDef="let element">
+        <i class="fas fa-qrcode" (click)="showQRCode(element.id)"></i>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="edit">
       <th mat-header-cell *matHeaderCellDef></th>
 
