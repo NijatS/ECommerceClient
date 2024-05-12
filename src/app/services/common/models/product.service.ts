@@ -79,4 +79,13 @@ export class ProductService {
    await firstValueFrom(obs);
    successCallBack();
   }
+  async updateStockQrCodeToProduct(productId:string,stock:number,successCallBack?:()=>void){
+  const obs =  this.httpClientService.put({controller:"products",action:"qrcode"},
+    {productId:productId,
+      stock:stock
+    }
+  );
+   await firstValueFrom(obs);
+   successCallBack();
+  }
 }
