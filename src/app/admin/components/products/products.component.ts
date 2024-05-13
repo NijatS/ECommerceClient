@@ -31,7 +31,9 @@ export class ProductsComponent extends BaseComponent {
       options:{
         width:"1000px"
       },
-      afterClosed:()=>{}
+      afterClosed:()=>{
+       this.ListComponents.getProducts()
+      }
     })
 
   }

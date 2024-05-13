@@ -1,3 +1,4 @@
+import { ListComponent } from './../../admin/components/products/list/list.component';
 import { ProductService } from './../../services/common/models/product.service';
 import { MessagePositionEnum } from './../../services/admin/alertify.service';
 import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -31,7 +32,6 @@ private productService:ProductService){
 
 @ViewChild("scanner",{static:true}) scanner: NgxScannerQrcodeComponent
 @ViewChild("txtStock",{static:true}) txtStock: ElementRef;
-
 count  = 0;
 
   ngOnInit(): void {
@@ -50,12 +50,12 @@ count  = 0;
      if(this.count == 0){
       this.count++;
       await this.productService.updateStockQrCodeToProduct(jsonData.Id,parseInt(stockValue),()=>{
+        console.log(this.dialogRef.close)
         $("#btnClose").click();
         this.toastrService.message(`${jsonData.Name} stock count updated`,"Stock Update",{
           toastrType:ToastrType.Success,
           toastrPosition:ToastrPosition.TopRight,
         })
-
         this.spinner.hide(SpinnerType.BallFussion)
       })
     }
